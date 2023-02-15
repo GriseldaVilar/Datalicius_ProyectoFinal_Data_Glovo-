@@ -1,0 +1,468 @@
+---
+title: "Análisis de datos R Visualización y Boxplot"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+library(tidyverse)
+ruta_csv  <- "/Users/griseldacode/Desktop/PROYECTO FINAL DATALICIUS/R/df_madridfinalnanfinal.csv"
+```
+
+```{r}
+df_madrid_final <- read.csv(ruta_csv , sep=",", na.strings = "")
+#To carry out an analysis of the Na values and missing values on the original data base, we replaced the blank spaces with na.strings = ""
+head(df_madrid_final)
+```
+
+**Distribución de los datos y análisis de las variables seleccionadas. Ver los valores de las variables**
+
+**Data distribution and analysis of the selected variables. To view the values of variables**
+
+Tenemos para comprobar si hay valores dispares. Debemos comprobar porque 1 solo valor atípico transforma la media puede ser que sea un dato erróneo o simplemente que sí sea real, debemos valorarlo, en algunas variables es normal tener valores atípicos (por ejemplo, valoraciones de clientes). También valorar si filtrar los valores atípicos de variables como preci o número de reviews
+
+To check for outliers. 1 single outlier value transforms the average, it could be that it is an erroneous data or simply that it is real, we must value it, in some variables it is normal to have atypical values (for example, customer evaluations). It is also recommended to assess whether to filter outliers of variables such as price or number of reviews
+
+```{r}
+#df_madrid_final$Price_new
+#df_madrid_final$Number.of.Reviews
+#df_madrid_final$Bedrooms_new
+#df_madrid_final$Host.Total.Listings.Count
+```
+
+Preliminary inspection of a data frame
+
+```{r}
+summary(df_madrid_final$Price_new)
+summary(df_madrid_final$Number.of.Reviews)
+summary(df_madrid_final$Bedrooms_new, na.rm = TRUE)
+summary(df_madrid_final$Host.Response.Rate, na.rm = TRUE)
+summary(df_madrid_final$Host.Total.Listings.Count, na.rm = TRUE)
+summary(df_madrid_final$Bathrooms_new, na.rm = TRUE)
+summary(df_madrid_final$Beds_new, na.rm = TRUE)
+summary(df_madrid_final$Security.Deposit, na.rm = TRUE)
+summary(df_madrid_final$Cleaning.Fee, na.rm = TRUE)
+summary(df_madrid_final$Review.Scores.Rating, na.rm = TRUE)
+summary(df_madrid_final$Review.Scores.Location, na.rm = TRUE)
+summary(df_madrid_final$Accommodates, na.rm = TRUE)
+summary(df_madrid_final$Review.Scores.Value, na.rm = TRUE)
+summary(df_madrid_final$Price_new_weekly, na.rm = TRUE)
+summary(df_madrid_final$Price_new_monthly, na.rm = TRUE)
+summary(df_madrid_final$Calculated.host.listings.count, na.rm = TRUE)
+```
+
+Buscar el valor máximo de cada variable/To find the maximum value of each variable
+
+```{r}
+max(df_madrid_final$Price_new)
+max(df_madrid_final$Number.of.Reviews)
+max(df_madrid_final$Bedrooms_new)
+max(df_madrid_final$Host.Response.Rate, na.rm = TRUE)
+max(df_madrid_final$Host.Total.Listings.Count, na.rm = TRUE)
+max(df_madrid_final$Bathrooms_new, na.rm = TRUE)
+max(df_madrid_final$Beds_new, na.rm = TRUE)
+max(df_madrid_final$Security.Deposit, na.rm = TRUE)
+max(df_madrid_final$Cleaning.Fee, na.rm = TRUE)
+max(df_madrid_final$Review.Scores.Rating, na.rm = TRUE)
+max(df_madrid_final$Review.Scores.Location, na.rm = TRUE)
+max(df_madrid_final$Accommodates, na.rm = TRUE)
+max(df_madrid_final$Review.Scores.Value, na.rm = TRUE)
+max(df_madrid_final$Price_new_weekly, na.rm = TRUE)
+max(df_madrid_final$Price_new_monthly, na.rm = TRUE)
+max(df_madrid_final$Calculated.host.listings.count, na.rm = TRUE)
+```
+
+La posición en la que se encuentra ese valor máximo/ Position maximum value
+
+```{r}
+which.max(df_madrid_final$Price_new)
+which.max(df_madrid_final$Number.of.Reviews)
+which.max(df_madrid_final$Bedrooms_new)
+which.max(df_madrid_final$Host.Response.Rate)
+which.max(df_madrid_final$Host.Total.Listings.Count)
+which.max(df_madrid_final$Bathrooms_new)
+which.max(df_madrid_final$Beds_new)
+which.max(df_madrid_final$Security.Deposit)
+which.max(df_madrid_final$Cleaning.Fee)
+which.max(df_madrid_final$Review.Scores.Rating)
+which.max(df_madrid_final$Review.Scores.Location)
+which.max(df_madrid_final$Accommodates)
+which.max(df_madrid_final$Review.Scores.Value)
+which.max(df_madrid_final$Price_new_weekly)
+which.max(df_madrid_final$Price_new_monthly)
+which.max(df_madrid_final$Calculated.host.listings.count)
+```
+
+Valor mínimo para cada variable/Minimum value for each variable
+
+```{r}
+min(df_madrid_final$Price_new)
+min(df_madrid_final$Number.of.Reviews)
+min(df_madrid_final$Bedrooms_new)
+min(df_madrid_final$Host.Response.Rate, na.rm = TRUE)
+min(df_madrid_final$Host.Total.Listings.Count, na.rm = TRUE)
+min(df_madrid_final$Bathrooms_new, na.rm = TRUE)
+min(df_madrid_final$Beds_new, na.rm = TRUE)
+min(df_madrid_final$Security.Deposit, na.rm = TRUE)
+min(df_madrid_final$Cleaning.Fee, na.rm = TRUE)
+min(df_madrid_final$Review.Scores.Rating, na.rm = TRUE)
+min(df_madrid_final$Review.Scores.Location, na.rm = TRUE)
+min(df_madrid_final$Accommodates, na.rm = TRUE)
+min(df_madrid_final$Review.Scores.Value, na.rm = TRUE)
+min(df_madrid_final$Price_new_weekly, na.rm = TRUE)
+min(df_madrid_final$Price_new_monthly, na.rm = TRUE)
+min(df_madrid_final$Calculated.host.listings.count, na.rm = TRUE)
+```
+
+Posición valor mínimo/Position minimum value
+
+```{r}
+which.min(df_madrid_final$Price_new)
+which.min(df_madrid_final$Number.of.Reviews)
+which.min(df_madrid_final$Bedrooms_new)
+which.min(df_madrid_final$Host.Response.Rate)
+which.min(df_madrid_final$Host.Total.Listings.Count)
+which.min(df_madrid_final$Bathrooms_new)
+which.min(df_madrid_final$Beds_new)
+which.min(df_madrid_final$Security.Deposit)
+which.min(df_madrid_final$Cleaning.Fee)
+which.min(df_madrid_final$Review.Scores.Rating)
+which.min(df_madrid_final$Review.Scores.Location)
+which.min(df_madrid_final$Accommodates)
+which.min(df_madrid_final$Review.Scores.Value)
+which.min(df_madrid_final$Price_new_weekly)
+which.min(df_madrid_final$Price_new_monthly)
+which.min(df_madrid_final$Calculated.host.listings.count)
+```
+
+Medias para variables/means for variables
+
+```{r}
+round(mean(df_madrid_final$Price_new))
+round(mean(df_madrid_final$Number.of.Reviews))
+round(mean(df_madrid_final$Bedrooms_new))
+round(mean(df_madrid_final$Host.Response.Rate, na.rm = TRUE))
+round(mean(df_madrid_final$Host.Total.Listings.Count, na.rm = TRUE))
+round(mean(df_madrid_final$Bathrooms_new, na.rm = TRUE))
+round(mean(df_madrid_final$Beds_new, na.rm = TRUE))
+round(mean(df_madrid_final$Security.Deposit, na.rm = TRUE))
+round(mean(df_madrid_final$Cleaning.Fee, na.rm = TRUE))
+round(mean(df_madrid_final$Review.Scores.Rating, na.rm = TRUE))
+round(mean(df_madrid_final$Review.Scores.Location, na.rm = TRUE))
+round(mean(df_madrid_final$Accommodates, na.rm = TRUE))
+round(mean(df_madrid_final$Review.Scores.Value, na.rm = TRUE))
+round(mean(df_madrid_final$Price_new_weekly, na.rm = TRUE))
+round(mean(df_madrid_final$Price_new_monthly, na.rm = TRUE))
+round(mean(df_madrid_final$Calculated.host.listings.count, na.rm = TRUE))
+#con las variables que contienen NA no podemos ejecutar algunas funciones, ver si queremos rellenar, corregir o recuperar alguna variable numérica completa del data original
+#To avoid problems when executing some functions with Na values. Check if it is possible to fill, correct or recover some complete numeric variable from the original data
+```
+
+Si pasamos el valor trim quitamos el 20 por ciento de los valores extremos por abajo y arriba
+
+The trim value removes 20 percent of the extreme values below and above
+
+```{r}
+round(mean(df_madrid_final$Price_new, trim =0.2))
+round(mean(df_madrid_final$Number.of.Reviews, trim =0.2))
+round(mean(df_madrid_final$Bedrooms_new, trim =0.2))
+round(mean(df_madrid_final$Host.Total.Listings.Count, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Host.Response.Rate, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Bathrooms_new, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Beds_new, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Security.Deposit, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Cleaning.Fee, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Review.Scores.Rating, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Review.Scores.Location, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Accommodates, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Review.Scores.Value, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Price_new_weekly, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Price_new_monthly, na.rm = TRUE, trim =0.2))
+round(mean(df_madrid_final$Calculated.host.listings.count, na.rm = TRUE, trim =0.2))
+```
+
+Con la varianza medimos el grado de dispersión de una variable, cómo se separan los datos de la media
+
+Variance to measure the degree of dispersion of a variable, how the data is separated from the mean
+
+```{r}
+var(df_madrid_final$Price_new)
+var(df_madrid_final$Number.of.Reviews)
+var(df_madrid_final$Bedrooms_new)
+var(df_madrid_final$Host.Total.Listings.Count, na.rm = TRUE)
+var(df_madrid_final$Host.Response.Rate, na.rm = TRUE)
+var(df_madrid_final$Bathrooms_new, na.rm = TRUE)
+var(df_madrid_final$Beds_new, na.rm = TRUE)
+var(df_madrid_final$Security.Deposit, na.rm = TRUE)
+var(df_madrid_final$Cleaning.Fee, na.rm = TRUE)
+var(df_madrid_final$Review.Scores.Rating, na.rm = TRUE)
+var(df_madrid_final$Review.Scores.Location, na.rm = TRUE)
+var(df_madrid_final$Accommodates, na.rm = TRUE)
+var(df_madrid_final$Review.Scores.Value, na.rm = TRUE)
+var(df_madrid_final$Price_new_weekly, na.rm = TRUE)
+var(df_madrid_final$Price_new_monthly, na.rm = TRUE)
+var(df_madrid_final$Calculated.host.listings.count, na.rm = TRUE)
+```
+
+Desviación típica/standard deviation
+
+```{r}
+sd(df_madrid_final$Price_new)
+sd(df_madrid_final$Number.of.Reviews)
+sd(df_madrid_final$Bedrooms_new)
+sd(df_madrid_final$Host.Total.Listings.Count, na.rm = TRUE)
+sd(df_madrid_final$Host.Response.Rate, na.rm = TRUE)
+sd(df_madrid_final$Bathrooms_new, na.rm = TRUE)
+sd(df_madrid_final$Beds_new, na.rm = TRUE)
+sd(df_madrid_final$Security.Deposit, na.rm = TRUE)
+sd(df_madrid_final$Cleaning.Fee, na.rm = TRUE)
+sd(df_madrid_final$Review.Scores.Rating, na.rm = TRUE)
+sd(df_madrid_final$Review.Scores.Location, na.rm = TRUE)
+sd(df_madrid_final$Accommodates, na.rm = TRUE)
+sd(df_madrid_final$Review.Scores.Value, na.rm = TRUE)
+sd(df_madrid_final$Price_new_weekly, na.rm = TRUE)
+sd(df_madrid_final$Price_new_monthly, na.rm = TRUE)
+sd(df_madrid_final$Calculated.host.listings.count, na.rm = TRUE)
+```
+
+Mediana para las variables (la mitad de los elementos son superiores y la mitad inferiores). Utilizar la mediana es más fiable que la media porque en algunas variables es normal tener valores atípicos que distorsionan la media, se debe valorar según variable
+
+Median for the variables (half of the elements are higher and half are lower). Using the median is more reliable than the mean because in some variables it is normal to have outliers that distort the mean, it must be valued according to the variable
+
+```{r}
+round(median(df_madrid_final$Price_new))
+round(median(df_madrid_final$Number.of.Reviews))
+round(median(df_madrid_final$Bedrooms_new))
+round(median(df_madrid_final$Host.Total.Listings.Count, na.rm = TRUE))
+round(median(df_madrid_final$Host.Response.Rate, na.rm = TRUE))
+round(median(df_madrid_final$Bathrooms_new, na.rm = TRUE))
+round(median(df_madrid_final$Beds_new, na.rm = TRUE))
+round(median(df_madrid_final$Security.Deposit, na.rm = TRUE))
+round(median(df_madrid_final$Cleaning.Fee, na.rm = TRUE))
+round(median(df_madrid_final$Review.Scores.Rating, na.rm = TRUE))
+round(median(df_madrid_final$Review.Scores.Location, na.rm = TRUE))
+round(median(df_madrid_final$Accommodates, na.rm = TRUE))
+round(median(df_madrid_final$Review.Scores.Value, na.rm = TRUE))
+round(median(df_madrid_final$Price_new_weekly, na.rm = TRUE))
+round(median(df_madrid_final$Price_new_monthly, na.rm = TRUE))
+round(median(df_madrid_final$Calculated.host.listings.count, na.rm = TRUE))
+```
+
+Cuartiles para ver distintos rangos en (4) grupos distribuye los valores en el 10%, 25%, 75%, 90%
+
+Quartiles to check different ranges in (4) groups distribute the values in 10%, 25%, 75%, 90%
+
+```{r}
+quantile(df_madrid_final$Price_new, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Number.of.Reviews, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Bedrooms_new, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Host.Total.Listings.Count, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Host.Response.Rate, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Bathrooms_new, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Beds_new, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Security.Deposit, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Cleaning.Fee, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Review.Scores.Rating, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Review.Scores.Location, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Accommodates, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Review.Scores.Value, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Price_new_weekly, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Price_new_monthly, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+quantile(df_madrid_final$Calculated.host.listings.count, na.rm = TRUE, c(0.1, 0.25, 0.5, 0.75, 0.9))
+```
+
+Pintamos los cuartiles y la mediana Precio
+
+Chart of quartiles and median Price
+
+```{r}
+library(ggplot2)
+boxplot(df_madrid_final$Price_new)
+grid
+```
+
+Pintamos los cuartiles y la mediana Precio filtrado 120
+
+Median and quartile chart, filtered price 120
+
+```{r}
+library(ggplot2)
+x <- df_madrid_final$Price_new[df_madrid_final$Price_new<120]
+boxplot(x)
+grid
+```
+
+Pintamos los cuartiles y la mediana Number.of.Reviews
+
+Chart of quartiles and median Number.of.Reviews
+
+```{r}
+library(ggplot2)
+boxplot(df_madrid_final$Number.of.Reviews)
+grid
+```
+
+Pintamos los cuartiles y la mediana Number.of.Reviews filtrada 70
+
+Median and quartile graph, Filtered Number.of.Reviews 70
+
+```{r}
+library(ggplot2)
+x2 <- df_madrid_final$Number.of.Reviews[df_madrid_final$Number.of.Reviews<70]
+boxplot(x2)
+grid
+```
+
+Pintamos los cuartiles y la mediana Bedrooms_new
+
+Chart of quartiles and median Bedrooms_new
+
+```{r}
+library(ggplot2)
+boxplot(df_madrid_final$Bedrooms_new)
+grid
+```
+
+Pintamos los cuartiles y la mediana Bedrooms_new filtrada 6
+
+Chart of quartiles and median, Filtered Bedrooms_new 6
+
+```{r}
+library(ggplot2)
+x3 <- df_madrid_final$Bedrooms_new[df_madrid_final$Bedrooms_new<6]
+boxplot(x3)
+grid
+```
+
+Pintamos los cuartiles y la mediana Is.Super.Host.YES.NO, gráfico comparativo Precio
+
+Median and quartiles chart Is.Super.Host.YES.NO, comparison chart Price
+
+```{r}
+ggplot(df_madrid_final, aes(x=Is.Super.Host.YES.NO, y=Price_new, color=Is.Super.Host.YES.NO))+geom_boxplot()+
+ labs(title='Is Super Host or No/Price')
+```
+
+Pintamos los cuartiles y la mediana Is.Super.Host.YES.NO gráfico comparativo filtrado precio 200
+
+Median and quartiles chart Is.Super.Host.YES.NO, filtered comparison chart price 200
+
+```{r}
+df_price_rango <- df_madrid_final %>% 
+  filter(df_madrid_final$Price_new < 200) %>% 
+  group_by(Is.Super.Host.YES.NO)
+ggplot(df_price_rango, aes(x=Is.Super.Host.YES.NO, y=Price_new, color=Is.Super.Host.YES.NO))+geom_boxplot()+
+  labs(title='Is Super Host or No/Price filtered 200')
+```
+
+Pintamos los cuartiles y la mediana Is.Super.Host.YES.NO, gráfico comparativo Number.of.Reviews
+
+Quartiles and Median Chart Is.Super.Host.YES.NO Number.of.Reviews comparison
+
+```{r}
+ggplot(df_madrid_final, aes(x=Is.Super.Host.YES.NO, y=Number.of.Reviews, color=Is.Super.Host.YES.NO))+geom_boxplot()+
+ labs(title='Is Super Host or No/Number.of.Reviews')
+```
+
+Pintamos los cuartiles y la mediana Number.of.Reviews gráfico comparativo reviews filtrado 70
+
+Median and quartile graph Number.of.Reviews comparative graph reviews filtered 70
+
+```{r}
+df_reviews_rango <- df_madrid_final %>% 
+  filter(df_madrid_final$Number.of.Reviews < 70) %>% 
+  group_by(Is.Super.Host.YES.NO)
+ggplot(df_reviews_rango, aes(x=Is.Super.Host.YES.NO, y=Number.of.Reviews, color=Is.Super.Host.YES.NO))+geom_boxplot()+
+   labs(title='Is Super Host or No/Number.of.Reviews filtered 70')
+```
+
+Pintamos los cuartiles y la mediana precio gráfico comparativo tipo de habitacion
+
+Graph of the quartiles and the median price, comparative type of room
+
+```{r}
+ggplot(df_madrid_final, aes(x=Room.Type, y=Price_new, color=Room.Type))+geom_boxplot()+
+ labs(title='Room.Type/Price')
+```
+
+Pintamos los cuartiles y la mediana precio gráfico comparativo tipo de habitacion, filtrado precio 200
+
+Graph of the quartiles and the median price of room type, filtered price 200
+
+```{r}
+df_price_rango2 <- df_madrid_final %>% 
+  filter(df_madrid_final$Price_new < 200) %>% 
+  group_by(Room.Type)
+ggplot(df_price_rango2, aes(x=Room.Type, y=Price_new, color=Room.Type))+geom_boxplot()+
+  labs(title='Room.Type/Price 200')
+```
+
+Pintamos los cuartiles y la mediana número de reviews gráfico comparativo tipo de habitacion
+
+Graph of the quartiles and the median number of reviews comparative graph of room type
+
+```{r}
+ggplot(df_madrid_final, aes(x=Room.Type, y=Number.of.Reviews, color=Room.Type))+geom_boxplot()+
+ labs(title='Room.Type/Number.of.Reviews')
+```
+
+Pintamos los cuartiles y la mediana número de reviews gráfico comparativo tipo de habitacion, filtrado 70
+
+Graph of the quartiles and the median number of reviews, comparative graph of room type, filtered 70
+
+```{r}
+df_price_reviews <- df_madrid_final %>% 
+  filter(df_madrid_final$Number.of.Reviews < 70) %>% 
+  group_by(Room.Type)
+ggplot(df_price_reviews, aes(x=Room.Type, y=Number.of.Reviews, color=Room.Type))+geom_boxplot()+
+  labs(title='Room.Type/Number.of.Reviews 70')
+```
+
+Pintamos los cuartiles y la mediana precio gráfico comparativo Is Super Host or No/Room.Type
+
+Graph of the quartiles and the median price, comparative graph of Is Super Host or No/Room.Type
+
+```{r}
+ggplot(df_madrid_final, aes(x=Room.Type, y=Price_new, color=Is.Super.Host.YES.NO))+geom_boxplot()+labs(title='Is Super Host or No/Price/Room.Type')
+```
+
+Pintamos los cuartiles y la mediana número de reviews gráfico comparativo Is Super Host or No/Room.Type
+
+Graph of the quartiles and the median Number.of.Reviews, comparative graph of Is Super Host or No/Room.Type
+
+```{r}
+ggplot(df_madrid_final, aes(x=Room.Type, y=Number.of.Reviews, color=Is.Super.Host.YES.NO))+geom_boxplot()+
+ labs(title='Is Super Host or No/Number.of.Reviews/Room.Type')
+```
+
+Pintamos los cuartiles y la mediana número de reviews gráfico comparativo Is Super Host or No/Room.Type, filtrado 70
+
+Chart of quartiles and median number of reviews comparison chart Is Super Host or No/Room.Type, filtered 70
+
+```{r}
+df_price_rango3 <- df_madrid_final %>% 
+  filter(df_madrid_final$Number.of.Reviews < 70) %>% 
+  group_by(Is.Super.Host.YES.NO)
+ggplot(df_price_rango3, aes(x=Room.Type, y=Number.of.Reviews, color=Is.Super.Host.YES.NO))+geom_boxplot()+
+  labs(title='Is Super Host or No/Room.Type/Number.of.Reviews filtered 70')
+```
+
+Pintamos los cuartiles y la mediana número de reviews gráfico comparativo Is Super Host or No/ Price, filtrado 200
+
+Chart of quartiles and median number of reviews comparison chart Is Super Host or No/Price, filtered 200
+
+```{r}
+df_price_price3 <- df_madrid_final %>% 
+  filter(df_madrid_final$Price_new < 200) %>% 
+  group_by(Is.Super.Host.YES.NO)
+ggplot(df_price_price3, aes(x=Room.Type, y=Price_new, color=Is.Super.Host.YES.NO))+geom_boxplot()+
+  labs(title='Is Super Host or No/Room.Type/Price filtered 200')
+```
