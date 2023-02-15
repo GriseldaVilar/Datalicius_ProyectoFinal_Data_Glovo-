@@ -1,0 +1,172 @@
+---
+title: "Data analysis & Quality Data Original R 1 Report"
+output: pdf_document
+date: "2023-02-08"
+---
+When you click the Render button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+library(tidyverse)
+ruta_csv  <- "/Users/griseldacode/Desktop/PROYECTO FINAL DATALICIUS/airbnb-listings.csv"
+```
+
+```{r}
+df <- read.csv(ruta_csv , sep=";", na.strings = "")
+#To carry out an analysis of the Na values and missing values on the original data base, we replaced the blank spaces with na.strings = ""
+```
+
+Lost data brings loss of information and a lower precision in the estimation of the parameters of interest.
+
+This is important for statistical analysis.
+
+FIRST STAGE: missing data evaluation and exploration with the original data frame (airbnb-listings.csv)
+
+The mission is to to check the quality of the data to make decisions about null values and identify most important variables. Which values to fill in, which values to omit, which values to unify or apply functions or algorithms. This justifies the cleanup actions implemented in Python in the original dataset. 
+
+Exploration and evaluation
+
+Data frame structure and composition:
+
+```{r}
+dim(df)
+ncol(df)
+length(df)
+```
+
+```{r}
+names(df)
+```
+
+Types of objects and classes of the data and each variable:
+
+```{r}
+class(df)
+sapply(df, class)
+#str(df)
+```
+
+Summary of data set data and structure:
+
+```{r}
+#str(df)
+#summary(df)
+```
+
+Empty values in a selected column:
+
+```{r}
+#is.na(df$Review.Scores.Rating)
+```
+
+Missing values for each variable:
+
+```{r}
+colSums(is.na(df))
+```
+
+To calculate threshold of lost data, if the percentage is higher than 5% we must evaluate whether to eliminate the data or recover information.
+
+Function for absent percentages for each variable:
+
+```{r}
+MissingValuesPercentage <- function(x) {sum(is.na(x)) / length(x)*89}
+apply(df, 2, MissingValuesPercentage)
+```
+
+These variables have values above the optimal threshold. We proceed to study in Python the possibility of calculating or eliminating these variables: Weekly.Price, Monthly.Price, Square.Feet, Security.Deposit, Review.Scores.Rating, Review.Scores.Accuracy, Review.Scores.Communication, Review.Scores.Location, Review.Scores.Cleanliness, Review.Scores.Value, Review.Scores.Checkin, Reviews.per.Month, Host.Response.Rate.
+
+More than 30 percent should be disregarded. In this case, we decided to eliminate "Square.Feet", "License" and "Jurisdiction.Names". We decided to calculate prices per month and week, taking total prices calculated per neighborhood and a estimation per week and month. Also to complete "Bedrooms" and "Beds" variables with estimated values (performed in Python).
+
+To estimate the exact amount of data we have per variable to assess the quality of the data frame:
+
+```{r}
+apply(df, MARGIN = -1, function(x) sum(is.na(x))) 
+```
+
+To check unique values for each variable:
+
+```{r}
+df %>% summarise_all(funs(n_distinct(.)))
+```
+
+```{r}
+#unique(df$Price)
+#unique(df$Number.of.Reviews)
+#unique(df$Neighbourhood.Cleansed)
+```
+
+Data frame values and NA:
+
+```{r}
+apply(df, MARGIN = -1, function(x) sum(is.na(x))) 
+```
+
+
+```{r}
+#summary(df) Of the entire data frame
+summary(df$Price)
+```
+
+To check true or false values according to variable distribution in the data:
+
+```{r}
+#is.na(df) %>%
+  #head()
+```
+
+Visualization and Evaluation. Quality of the original data
+
+Graph 1. Proportion of missing data and to compare the quality of the integer and numeric variables
+
+```{r}
+library(visdat)
+df_visualization_integer <- df[,c('Scrape.ID', 'Host.Response.Rate', 'Host.Listings.Count', 'Host.Total.Listings.Count', 'Bedrooms', 'Bathrooms', 'Beds', 'Square.Feet', 'Price', 'Weekly.Price', 'Security.Deposit', 'Monthly.Price', 'Cleaning.Fee', 'Review.Scores.Rating', 'Review.Scores.Accuracy', 'Review.Scores.Cleanliness', 'Review.Scores.Checkin', 'Review.Scores.Communication', 'Review.Scores.Value', 'Review.Scores.Location','Reviews.per.Month','Price', 'Number.of.Reviews', 'Accommodates', 'Minimum.Nights', 'Guests.Included', 'Extra.People', 'Availability.30', 'Availability.60', 'Availability.90', 'Availability.365')]
+vis_dat(df_visualization_integer)
+```
+
+```{r}
+library(visdat)
+df_visualization2 = df[,c('Listing.Url', 'Name', 'Summary', 'Space', 'Description', 'Neighborhood.Overview','Notes','Transit', 'Access', 'Interaction','House.Rules','Host.Name', 'Host.Since','Host.Location','Host.About','Host.Response.Time','Host.Acceptance.Rate',  'Host.Neighbourhood','Host.Verifications','Street','Neighbourhood','Neighbourhood.Cleansed', 'Neighbourhood.Group.Cleansed', 'City', 'State', 'Zipcode','Market','Smart.Location', 'Country.Code','Country','Property.Type','Room.Type','Bed.Type', 'Amenities','Calendar.Updated','First.Review','Last.Review','License','Features','Cancellation.Policy','Jurisdiction.Names', 'Room.Type')]
+vis_dat(df_visualization2)
+```
+
+Graph 2. Percentages of missing data in the data frame
+
+```{r}
+vis_miss(df_visualization_integer,sort_miss = TRUE) 
+```
+
+Graph 3. Cluster of missing data
+
+```{r}
+vis_miss(df_visualization_integer,sort_miss = TRUE, cluster = TRUE)
+```
+
+```{r}
+library(naniar)
+n_var_miss(df_visualization_integer)
+```
+
+Graph 4. Number of missing values in each variable.
+```{r}
+gg_miss_var(df_visualization_integer, show_pct = TRUE)
+```
+
+```{r}
+library(ggplot2)
+gg_miss_var(df_visualization2, show_pct = TRUE)
+```
+
+Graph 5. Number of missings by a categorical variable.
+
+```{r}
+library(ggplot2)
+gg_miss_fct(x= df_visualization2, fct = Room.Type)
+```
+
+```{r}
+library(ggplot2)
+data_visualitation_int = df[,c('Scrape.ID', 'Host.Response.Rate', 'Host.Listings.Count', 'Host.Total.Listings.Count', 'Bedrooms', 'Bathrooms', 'Beds', 'Square.Feet', 'Price', 'Weekly.Price', 'Security.Deposit', 'Monthly.Price', 'Cleaning.Fee', 'Review.Scores.Rating', 'Review.Scores.Accuracy', 'Review.Scores.Cleanliness', 'Review.Scores.Checkin', 'Review.Scores.Communication', 'Review.Scores.Value', 'Review.Scores.Location','Reviews.per.Month','Price', 'Number.of.Reviews', 'Accommodates', 'Minimum.Nights', 'Guests.Included', 'Extra.People', 'Availability.30', 'Availability.60', 'Availability.90', 'Availability.365', 'Room.Type')]
+gg_miss_fct(x= data_visualitation_int, fct = Room.Type)
+```
+
