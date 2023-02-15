@@ -1,0 +1,169 @@
+---
+title: "Regresión Variables múltiples"
+format: pdf
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+library(tidyverse)
+ruta_csv  <- "/Users/griseldacode/Desktop/PROYECTO FINAL DATALICIUS/R/df_madridfinalnanfinal.csv"
+```
+
+```{r}
+df_madrid_final <- read.csv(ruta_csv , sep=",", na.strings = "")
+#To carry out an analysis of the Na values and missing values on the original data base, we replaced the blank spaces with na.strings = ""
+```
+
+**REGRESIÓN VARIABLES MÚLTIPLES/MULTIPLE REGRESSION**
+
+Para realizar una regresión de variable múltiple elegimos las variables con una mayor relación con el precio para crear un mejor modelo de predicción. Para ello hemos observado y analizado las matrices de correlación y los gráficos correspondientes y las regresiones lineales mediante las funciones cor(), lm() y predict()
+
+Multiple variable: variables with the highest correlation with price
+
+```{r}
+df_multipleregresion <- df_madrid_final[,c('Price_new', 'Review.Scores.Location', 'Accommodates', 'Host.Total.Listings.Count', 'Bedrooms_new', 'Bathrooms_new', 'Beds_new', 'Security.Deposit', 'Cleaning.Fee', 'Calculated.host.listings.count', 'Review.Scores.Rating')]
+```
+
+MATRIZ DE CORRELACIÓN/CORRELATION MATRIX FUNCIÓN COR()
+
+```{r}
+cor(na.omit(df_multipleregresion))
+```
+
+MODELO REGRESIÓN LINEAL MÚLTIPLE/MULTIPLE REGRESSION MODEL
+
+```{r}
+modelmultiple <- lm(df_multipleregresion, formula=Price_new~Review.Scores.Location+Accommodates+Host.Total.Listings.Count+Bedrooms_new+Bathrooms_new+Beds_new+Security.Deposit+Cleaning.Fee)
+summary(modelmultiple)
+```
+
+PREDICCIÓN REGRESIÓN LINEAL MÚLTIPLE/STADISTICAL PREDICTION MULTIPLE REGRESSION MODEL
+
+TO COMPARE THE PRICE PREDICTION OF THE MODEL FOR TWO CASES
+
+COMPARAMOS LOS RESULTADOS DEL MODELO DE PREDICCIÓN DE PRECIO PARA DOS CASOS SEGÚN LAS VARIABLES ESCOGIDAS
+
+```{r}
+predict(modelmultiple, data.frame(Review.Scores.Location=c(8, 10), Accommodates=c(4, 2), Host.Total.Listings.Count=c(3, 5), Bedrooms_new=c(2, 1), Bathrooms_new=c(2, 1), Beds_new=c(4,1), Security.Deposit=c(150, 80), Cleaning.Fee=c(60, 20)))
+```
+
+APLICAMOS LA FUNCION CONFINT() PARA COMPROBAR LOS INTERVALOS DE CONFIANZA DEL MODELO DE REGRESIÓN
+
+```{r}
+confint(na.omit(modelmultiple))
+```
+
+PARA EVALUAR DE UNA FORMA MÁS ADECUADA LA VALIDEZ Y CALIDAD DE NUESTRO MODELO DIVIDIMOS NUESTROS DATOS EN DOS (TRAINING Y TEST) DE ESTA FORMA ES POSIBLE COMPROBAR EL COMPORTAMIENTO DEL MODELO CON DATOS NUEVOS, QUE NO HAN SIDO VISTOS PREVIAMENTE POR EL MODELO Y EVALUAR MEJOR SU CALIDAD
+
+```{r}
+df_multipleregresion2 <- df_multipleregresion[,c('Price_new', 'Review.Scores.Location', 'Accommodates', 'Host.Total.Listings.Count', 'Bedrooms_new', 'Bathrooms_new', 'Beds_new', 'Security.Deposit', 'Cleaning.Fee')]
+```
+
+```{r}
+set.seed(1234)
+idx <- sample(1:nrow(df_multipleregresion2), nrow(df_multipleregresion2)*0.7)
+train.df_multipleregresion2 <- df_multipleregresion2[idx,]
+test.df_multipleregresion2 <- df_multipleregresion2[-idx,]
+#para comprobar nrow(train.df_multipleregresion2), nrow(test.df_multipleregresion2)
+
+```
+
+```{r}
+modeltestandtrain <- lm(df_multipleregresion2, formula=Price_new~Review.Scores.Location+ Accommodates+Host.Total.Listings.Count+Bedrooms_new+Bathrooms_new+Beds_new+Security.Deposit+ Cleaning.Fee)
+summary(modeltestandtrain)
+```
+
+```{r}
+train.df_multipleregresion2$Price_new_est <- predict(modeltestandtrain, train.df_multipleregresion2)
+resultado <- caret::postResample(pred=train.df_multipleregresion2$Price_new_est, obs=train.df_multipleregresion$Price_new)
+```
+
+```{r}
+test.df_multipleregresion2$Price_new_est <- predict(modeltestandtrain, test.df_multipleregresion2)
+resultado_test <- caret::postResample(pred=test.df_multipleregresion2$Price_new_est, obs=test.df_multipleregresion$Price_new)
+```
+
+```{r}
+df_multipleregresion2 <- df_madrid_final[,c('Price_new', 'Accommodates', 'Host.Total.Listings.Count', 'Bedrooms_new', 'Bathrooms_new', 'Beds_new')]
+```
+
+```{r}
+set.seed(1234)
+idx <- sample(1:nrow(df_multipleregresion2), nrow(df_multipleregresion2)*0.7)
+train.df_multipleregresion2 <- df_multipleregresion2[idx,]
+test.df_multipleregresion2 <- df_multipleregresion2[-idx,]
+#para comprobar nrow(train.df_multipleregresion2), nrow(test.df_multipleregresion2)
+```
+
+```{r}
+train.df_multipleregresion2$Price_new_est <- predict(model3, train.df_multipleregresion2)
+resultado <- caret::postResample(pred=train.df_multipleregresion2$Price_new_est, obs=train.df_multipleregresion$Price_new)
+resultado
+```
+
+MODELO REGRESIÓN LINEAL MÚLTIPLE/MULTIPLE REGRESSION MODEL
+
+```{r}
+model3 <- lm(df_multipleregresion2, formula=Price_new~Accommodates+Host.Total.Listings.Count+Bedrooms_new+Bathrooms_new+Beds_new)
+summary(model3)
+```
+
+UNA VEZ TENEMOS EL MODELO CONSTRUIDO APLICAMOS LA FUNCIÓN PREDICT() PARA OBTENER LOS VALORES DE CONFIANZA A LA HORA DE REALIZAR PREDICCIONES DE PRECIO CON NUESTRO MODELO, TANTO PARA EL CONJUNTO DE DATOS DE TEST COMO DE TRAINING. SI ESTOS DATOS SON SIMILARES EN AMBOS NOS ENCONTRAMOS ANTE UN BUEN MODELO DE PREDICCIÓN
+
+```{r}
+train.df_multipleregresion2$Price_new_est <- predict(model3, train.df_multipleregresion2)
+resultado <- caret::postResample(pred=train.df_multipleregresion2$Price_new_est, obs=train.df_multipleregresion$Price_new)
+resultado
+```
+
+```{r}
+test.df_multipleregresion2$Price_new_est <- predict(model3, test.df_multipleregresion2)
+resultado_test <- caret::postResample(pred=test.df_multipleregresion2$Price_new_est, obs=test.df_multipleregresion$Price_new)
+resultado_test
+```
+
+```{r}
+predict(model3, data.frame(Review.Scores.Location=c(8, 10), Accommodates=c(4, 2), Host.Total.Listings.Count=c(3, 5), Bedrooms_new=c(2, 1), Bathrooms_new=c(2, 1), Beds_new=c(4,1), Security.Deposit=c(150, 80), Cleaning.Fee=c(60, 20), Calculated.host.listings.count=c(3, 5), Review.Scores.Rating=c(100, 80)))
+```
+
+```{r}
+df_multipleregresion2 <- df_madrid_final[,c('Price_new', 'Review.Scores.Location', 'Accommodates', 'Host.Total.Listings.Count', 'Bedrooms_new', 'Bathrooms_new', 'Beds_new', 'Review.Scores.Rating', 'Host.Response.Rate', 'Review.Scores.Value', 'Number.of.Reviews', 'Security.Deposit', 'Cleaning.Fee', 'Review.Scores.Rating', 'Calculated.host.listings.count')]
+```
+
+```{r}
+modelmultiple2 <- lm(df_multipleregresion2, formula=Price_new~Review.Scores.Location+Accommodates+Bedrooms_new+Beds_new+Bathrooms_new+Bathrooms_new+Review.Scores.Rating+Cleaning.Fee)
+summary(modelmultiple2)
+```
+
+```{r}
+set.seed(1234)
+idx <- sample(1:nrow(df_multipleregresion3), nrow(df_multipleregresion3)*0.7)
+train.df_multipleregresion3 <- df_multipleregresion3[idx,]
+test.df_multipleregresion3 <- df_multipleregresion3[-idx,]
+#para comprobar nrow(train.df_multipleregresion2), nrow(test.df_multipleregresion2)
+```
+
+```{r}
+model4 <- lm(df_multipleregresion3, formula=Price_new~Review.Scores.Location, Accommodates, Host.Total.Listings.Count, Bedrooms_new, Bathrooms_new, Beds_new)
+summary(model4)
+```
+
+```{r}
+train.df_multipleregresion3$Price_new_est <- predict(model4, train.df_multipleregresion3)
+resultado2 <- caret::postResample(pred=train.df_multipleregresion3$Price_new_est, obs=train.df_multipleregresion$Price_new)
+resultado2
+```
+
+```{r}
+test.df_multipleregresion3$Price_new_est <- predict(model4, test.df_multipleregresion3)
+resultado_test2 <- caret::postResample(pred=test.df_multipleregresion3$Price_new_est, obs=test.df_multipleregresion$Price_new)
+resultado_test2
+```
