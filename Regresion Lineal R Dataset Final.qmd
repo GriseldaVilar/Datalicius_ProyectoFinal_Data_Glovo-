@@ -1,0 +1,439 @@
+---
+title: "Regresion Lineal R Dataset Final"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+library(tidyverse)
+ruta_csv  <- "/Users/griseldacode/Desktop/PROYECTO FINAL DATALICIUS/R/df_madridfinalnanfinal.csv"
+```
+
+```{r}
+df_madrid_final <- read.csv(ruta_csv , sep=",", na.strings = "")
+#To carry out an analysis of the Na values and missing values on the original data base, we replaced the blank spaces with na.strings = ""
+```
+
+REGRESIÓN LINEAL PRECIO SEGÚN NÚMERO DE REVIEWS
+
+LINEAR REGRESSION PRICE/NUMBER OF REVIEWS
+
+```{r}
+library(ggplot2)
+ggplot(df_madrid_final, aes(x=Number.of.Reviews, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_madrid_final$Price_new, df_madrid_final$Number.of.Reviews)
+```
+
+MODELO/STADISTICAL MODEL PRICE/NUMBER OF REVIEWS
+
+```{r}
+model1 <- lm(df_madrid_final, formula=Price_new~Number.of.Reviews)
+summary(model1)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE/NUMBER OF REVIEWS
+
+```{r}
+df_predict <- data.frame(Number.of.Reviews=c(2, 4, 10, 20, 50, 100, 400))
+predict(model1, df_predict)
+```
+
+REGRESIÓN LINEAL PRECIO SEGÚN Review.Scores.Location
+
+LINEAR REGRESSION PRICE/Review.Scores.Location
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+df_Location <-df_madrid_final %>%
+  drop_na(Review.Scores.Location)
+
+ggplot(df_Location, aes(x=Review.Scores.Location, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_Location$Price_new, df_Location$Review.Scores.Location)
+```
+
+MODELO/STADISTICAL MODEL PRICE/Review.Scores.Location
+
+```{r}
+model2 <- lm(df_Location, formula=Price_new~Review.Scores.Location)
+summary(model2)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE/Review.Scores.Location
+
+```{r}
+price_ReviewLoc <- data.frame(Review.Scores.Location=c(5, 6, 7, 8, 9, 10))
+predict(model2, price_ReviewLoc)
+```
+
+REGRESIÓN LINEAL PRECIO SEGÚN ACCOMODATES
+
+LINEAR REGRESSION PRICE / ACCOMODATES
+
+```{r}
+library(ggplot2)
+ggplot(df_madrid_final, aes(x=Accommodates, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+MODELO/STADISTICAL MODEL PRICE/ ACCOMODATES
+
+```{r}
+model3 <- lm(df_madrid_final, formula=Price_new~Accommodates)
+summary(model3)
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_madrid_final$Price_new, df_madrid_final$Accommodates)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE/ ACCOMODATES
+
+```{r}
+price_Accommodatespred <- data.frame(Accommodates=c(1, 2, 3, 4, 5, 6, 10, 20))
+predict(model3, price_Accommodatespred)
+```
+
+REGRESION PRECIO SEGÚN HOST TOTAL LISTINGS
+
+LINEAR REGRESSION PRICE/HOST TOTAL LISTINGS
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+df_HostTotal <-df_madrid_final %>%
+  drop_na(Host.Total.Listings.Count)
+
+ggplot(df_HostTotal, aes(x=Host.Total.Listings.Count, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+MODELO/STADISTICAL MODEL PRICE/HOST TOTAL LISTINGS
+
+```{r}
+model4 <- lm(df_HostTotal, formula=Price_new~Host.Total.Listings.Count)
+summary(model4)
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_HostTotal$Price_new, df_HostTotal$Host.Total.Listings.Count)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE/HOST TOTAL LISTINGS
+
+```{r}
+price_HostListespred <- data.frame(Host.Total.Listings.Count=c(1, 2, 3, 4, 10, 20, 30, 50, 100, 200))
+predict(model4, price_HostListespred)
+```
+
+REGRESIÓN LINEAL SEGÚN Bedrooms_new
+
+LINEAR REGRESSION PRICE/Bedrooms_new
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+df_Bedrooms_new <-df_madrid_final %>%
+  drop_na(Bedrooms_new)
+
+ggplot(df_Bedrooms_new, aes(x=Bedrooms_new, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+MODELO/STADISTICAL MODEL PRICE/Bedrooms_new
+
+```{r}
+model5 <- lm(df_Bedrooms_new, formula=Price_new~Bedrooms_new)
+summary(model5)
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_madrid_final$Price_new, df_madrid_final$Bedrooms_new)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE/Bedrooms_new
+
+```{r}
+price_Bedrooms_newpred <- data.frame(Bedrooms_new=c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+predict(model5, price_Bedrooms_newpred)
+```
+
+REGRESION LINEAL SEGÚN HOST RESPONSE RATE
+
+LINEAR REGRESSION PRICE/HOST RESPONSE RATE
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+df_HostResponseRate1 <- df_madrid_final %>%
+  drop_na(Host.Response.Rate)
+ggplot(df_HostResponseRate1, aes(x=Host.Response.Rate, y=Price_new))+geom_point(color='blue')+geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+MODELO/STADISTICAL MODEL PRICE/HOST RESPONSE RATE
+
+```{r}
+model6 <- lm(df_HostResponseRate1, formula=Price_new~Host.Response.Rate)
+summary(model6)
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_HostResponseRate1$Price_new, df_HostResponseRate1$Host.Response.Rate)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE/HOST RESPONSE RATE
+
+```{r}
+price_Host.Response.Ratepred <- data.frame(Host.Response.Rate=c(0, 25, 30, 40, 50, 60, 70, 80, 100))
+predict(model6, price_Host.Response.Ratepred)
+```
+
+REGRESION LINEAL PRECIO /BATHROOMS
+
+LINEAR REGRESSION PRICE / BATHROOMS
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+df_Bathrooms_new <-df_madrid_final %>%
+  drop_na(Bathrooms_new)
+
+ggplot(df_Bathrooms_new, aes(x=Bathrooms_new, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+MODELO/STADISTICAL MODEL PRICE / BATHROOMS
+
+```{r}
+model7 <- lm(df_Bathrooms_new, formula=Price_new~Bathrooms_new)
+summary(model7)
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_Bathrooms_new$Price_new, df_Bathrooms_new$Bathrooms_new)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE / BATHROOMS
+
+```{r}
+price_Bathrooms_newpred <- data.frame(Bathrooms_new=c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+predict(model7, price_Bathrooms_newpred)
+```
+
+REGRESION LINEAL SEGÚN Beds_new/LINEAR REGRESSION PRICE/ Beds_new
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+df_Beds_new <-df_madrid_final %>%
+  drop_na(Beds_new)
+
+ggplot(df_Beds_new, aes(x=Beds_new, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+MODELO/STADISTICAL MODEL PRICE/ Beds_new
+
+```{r}
+model8 <- lm(df_Beds_new, formula=Price_new~Beds_new)
+summary(model8)
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_Beds_new$Price_new, df_Beds_new$Beds_new)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE/ Beds_new
+
+```{r}
+price_Beds_newpred <- data.frame(Beds_new=c(1, 2, 3, 4, 5, 6))
+predict(model8, price_Beds_newpred)
+```
+
+REGRESION LINEAL Review.Scores.Rating/LINEAR REGRESSION PRICE/ Review.Scores.Rating
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+df_ReviewScoresRating <-df_madrid_final %>%
+  drop_na(Review.Scores.Rating)
+
+ggplot(df_ReviewScoresRating, aes(x=Review.Scores.Rating, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+MODELO/STADISTICAL MODEL PRICE/ Review.Scores.Rating
+
+```{r}
+model9 <- lm(df_ReviewScoresRating, formula=Price_new~Review.Scores.Rating)
+summary(model9)
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_ReviewScoresRating$Price_new, df_ReviewScoresRating$Review.Scores.Rating)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE/ Review.Scores.Rating
+
+```{r}
+price_Scores.Ratingpred <- data.frame(Review.Scores.Rating=c(20, 30, 50, 60, 70, 80, 100))
+predict(model9, price_Scores.Ratingpred)
+```
+
+REGRESION LINEAL Review.Scores.Value/LINEAR REGRESSION PRICE/ Review.Scores.Value
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+df_ReviewScoresValue <-df_madrid_final %>%
+  drop_na(Review.Scores.Value)
+
+ggplot(df_ReviewScoresValue, aes(x=Review.Scores.Value, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+MODELO/STADISTICAL MODEL PRICE/ Review.Scores.Value
+
+```{r}
+model10 <- lm(df_ReviewScoresValue, formula=Price_new~Review.Scores.Value)
+summary(model10)
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_ReviewScoresValue$Price_new, df_ReviewScoresValue$Review.Scores.Value)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE/ Review.Scores.Value
+
+```{r}
+price_ScoresValuepred <- data.frame(Review.Scores.Value=c(2, 3, 4, 5, 6, 7, 8, 9, 10))
+predict(model10, price_ScoresValuepred)
+```
+
+REGRESION LINEAL Precio Security Deposit/LINEAR REGRESSION PRICE/ Security Deposit
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+df_ReviewSecurity <-df_madrid_final %>%
+  drop_na(Security.Deposit)
+
+ggplot(df_ReviewSecurity, aes(x=Security.Deposit, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+MODELO/STADISTICAL MODEL PRICE/ Security Deposit
+
+```{r}
+model11 <- lm(df_ReviewSecurity, formula=Price_new~Security.Deposit)
+summary(model11)
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_ReviewSecurity$Price_new, df_ReviewSecurity$Security.Deposit)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE/ Security Deposit
+
+```{r}
+price_ReviewSecuritypred <- data.frame(Security.Deposit=c(50, 100, 200, 300, 400, 500, 800, 900, 1000))
+predict(model11, price_ReviewSecuritypred)
+```
+
+REGRESION LINEAL Precio Cleaning.Fee /LINEAR REGRESSION PRICE/ Cleaning.Fee
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+df_Cleaning <-df_madrid_final %>%
+  drop_na(Cleaning.Fee)
+
+ggplot(df_Cleaning, aes(x=Cleaning.Fee, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+MODELO/STADISTICAL MODEL PRICE/ Cleaning.Fee
+
+```{r}
+model12 <- lm(df_Cleaning, formula=Price_new~Cleaning.Fee)
+summary(model12)
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_Cleaning$Price_new, df_Cleaning$Cleaning.Fee)
+```
+
+PREDICCIÓN/STADISTICAL PREDICTION PRICE/ Cleaning.Fee
+
+```{r}
+price_Cleaningpred  <- data.frame(Cleaning.Fee=c(10, 20, 30, 40,50, 60, 70, 80, 100))
+predict(model12, price_Cleaningpred )
+```
+
+REGRESION LINEAL Precio Calculated.host.listings.count /LINEAR REGRESSION PRICE Calculated.host.listings.count
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+df_Calculated <-df_madrid_final %>%
+  drop_na(Calculated.host.listings.count)
+
+ggplot(df_Calculated, aes(x=Calculated.host.listings.count, y=Price_new))+geom_point(color='blue')+
+  geom_smooth(method = 'lm', formula = y~x, color='red')
+```
+
+```{r}
+model13 <- lm(df_Calculated, formula=Price_new~Calculated.host.listings.count)
+summary(model13)
+```
+
+FUNCIÓN DE CORRELACIÓN
+
+```{r}
+cor(df_Calculated$Price_new, df_Calculated$Calculated.host.listings.count)
+```
+
+```{r}
+price_Calculatedpred <- data.frame(Calculated.host.listings.count=c(1, 2, 3, 4,5, 6, 7, 8, 10, 20, 30, 40, 50, 60, 100))
+predict(model13, price_Calculatedpred)
+```
