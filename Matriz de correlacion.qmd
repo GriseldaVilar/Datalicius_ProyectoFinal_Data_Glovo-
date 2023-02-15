@@ -1,0 +1,59 @@
+---
+title: "Matrices de correlación"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+library(tidyverse)
+ruta_csv  <- "/Users/griseldacode/Desktop/PROYECTO FINAL DATALICIUS/R/df_madridfinalnanfinal.csv"
+```
+
+```{r}
+df_madrid_final <- read.csv(ruta_csv , sep=",", na.strings = "")
+#To carry out an analysis of the Na values and missing values on the original data base, we replaced the blank spaces with na.strings = ""
+head(df_madrid_final)
+```
+
+**MATRIZ DE CORRELACIÓN**
+
+**Correlation matrix**
+
+```{r}
+#para poder comprobar con más variable numéricas no pueden contener NA
+matriz_correlacion = df_madrid_final[,c('Price_new', 'Number.of.Reviews', 'Bedrooms_new', 'Host.Total.Listings.Count', 'Host.Response.Rate', 'Bathrooms_new', 'Beds_new', 'Security.Deposit', 'Cleaning.Fee', 'Review.Scores.Rating', 'Review.Scores.Location', 'Accommodates', 'Review.Scores.Value', 'Price_new_weekly', 'Price_new_monthly', 'Calculated.host.listings.count')]
+cor(na.omit(matriz_correlacion))
+#las que se acercan a 1 son las que se relacionan más con el precio_new
+#si es negativa implica que puede relacionase pero a la inversa, es una correlación a mayor ese número de variable menos precio
+#Debemos comparar los resultados para Price_new con cada variable a comparar. Esta función nos permite ver todas las relaciones y las que influyen más en el precio
+```
+
+Gráfico de la matriz de correlación 1
+
+Correlation Matrix Chart 1
+
+```{r}
+library(GGally)
+matriz_correlacion_visual1<- df_madrid_final[,c('Price_new', 'Number.of.Reviews', 'Bedrooms_new', 'Host.Total.Listings.Count', 'Host.Response.Rate', 'Bathrooms_new', 'Beds_new')]
+ggpairs(na.omit(matriz_correlacion_visual1[,c('Price_new', 'Number.of.Reviews', 'Bedrooms_new', 'Host.Total.Listings.Count', 'Host.Response.Rate', 'Bathrooms_new', 'Beds_new')]),
+lower= list(continuous= wrap("points", alpha= 0.3, size=0.3, color='blue')))
+```
+
+Gráfico de la matriz de correlación 2
+
+Correlation Matrix Chart 2
+
+```{r}
+library(GGally)
+matriz_correlacion_visual2<- df_madrid_final[,c('Price_new','Security.Deposit', 'Cleaning.Fee', 'Review.Scores.Rating', 'Review.Scores.Location', 'Accommodates', 'Review.Scores.Value', 'Price_new_weekly', 'Price_new_monthly', 'Calculated.host.listings.count')]
+ggpairs(na.omit(matriz_correlacion_visual2[,c('Price_new','Security.Deposit', 'Cleaning.Fee', 'Review.Scores.Rating', 'Review.Scores.Location', 'Accommodates', 'Review.Scores.Value', 'Price_new_weekly', 'Price_new_monthly')]),
+lower= list(continuous= wrap("points", alpha= 0.3, size=0.3, color='blue')))
+```
